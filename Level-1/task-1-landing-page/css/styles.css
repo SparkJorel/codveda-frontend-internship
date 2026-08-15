@@ -1,0 +1,844 @@
+/* ============================================================
+   Codveda Technologies — Responsive Landing Page
+   Level 1 · Task 1
+
+   Design brief: light, minimal, professional. Flat colour only —
+   no gradients, no texture, no shadows.
+
+   Depth without shadows: the page sits on Codveda's off-white
+   #f9fbff and the cards are pure white on top of it. One step of
+   brightness does the work a drop shadow usually would.
+
+   Every colour is Codveda's own, from codveda.com's published
+   palette: #f9fbff light, #ffffff, #1b1f29 dark, #4b4f58 body
+   text, #e0e3eb borders, #2563eb primary, #103eb2 deep blue.
+
+   Layout: 12-column grid. Content blocks use equal spans — the six
+   services are three equal thirds, mission/vision two equal halves —
+   so every card in a row shares one baseline. The asymmetry lives in
+   the section headers instead (5·7 and 4·8), which keeps the page
+   from reading as a template without making the cards ragged.
+   ============================================================ */
+
+/* ---------- 1. Design tokens ---------- */
+:root {
+  /* Surfaces */
+  --paper:     #f9fbff;   /* Codveda light, exact — page ground */
+  --bone:      #ffffff;   /* cards, one step brighter than the page */
+  --sand:      #f2f5fa;   /* pressed / hover wash */
+
+  /* Text */
+  --ink:       #1b1f29;   /* Codveda dark, exact — headings */
+  --ash:       #4b4f58;   /* Codveda body text, exact */
+  --stone:     #676d79;   /* labels, metadata (AA on paper) */
+
+  /* Rules */
+  --line:      #e0e3eb;   /* Codveda border, exact */
+  --line-soft: #edeff4;
+
+  /* Brand colours, straight off the logo and the site palette */
+  --accent:      #2563eb; /* Codveda primary, exact */
+  --accent-deep: #103eb2; /* Codveda deep blue, exact — hover */
+  --blue:        #1a73e8; /* logo diamond */
+  --amber:       #ffa500; /* logo circle */
+  --red:         #ff3131; /* logo square */
+  --signal:      #d92020; /* logo red, darkened for AA on white */
+
+  /* Flat tints of the three logo colours — used as fills, never as text */
+  --tint-blue:   #eef3fe;
+  --tint-amber:  #fff6e6;
+  --tint-red:    #ffefef;
+  --band:        #f2f6fd;   /* section band, one flat step off the paper */
+
+  /* Contrast rule: #ffa500 and #ff3131 fail AA as text on white, so they
+     only ever appear as rules, bullets and fills. Coloured *text* is
+     restricted to #2563eb and #103eb2, which both clear 4.5:1. */
+
+  /* Type — the two faces codveda.com itself loads */
+  --font-display: "Poppins", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-body:    "Poppins", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-ui:      "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+
+  --step-display: clamp(2.6rem, 7.5vw, 5.5rem);
+  --step-h2:      clamp(1.8rem, 4vw, 2.8rem);
+  --step-h3:      clamp(1.05rem, 1.8vw, 1.25rem);
+  --step-lede:    clamp(1rem, 1.5vw, 1.1rem);
+  --step-ui:      0.75rem;
+
+  /* Space & shape */
+  --shell:     1280px;
+  --gutter:    clamp(1rem, 4vw, 3rem);
+  --gap:       clamp(1rem, 2vw, 1.5rem);
+  --section-y: clamp(4.5rem, 10vw, 8rem);
+  --radius:    4px;
+
+  --ease: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ---------- 2. Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background-color: var(--paper);
+  color: var(--ash);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; padding: 0; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: #fff; }
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 200;
+  padding: 0.7rem 1.1rem;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  transition: top 0.2s var(--ease);
+}
+.skip-link:focus { top: 1rem; }
+
+/* ---------- 3. Layout primitives ---------- */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* 12-column grid. Spans are applied at ≥62.5em only — below that the
+   grid collapses to one column and every child stacks. */
+.grid-12 { display: grid; gap: var(--gap); }
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+  scroll-margin-top: 5rem;
+}
+
+.section + .section { border-top: 1px solid var(--line); }
+
+.section__head { max-width: 44rem; margin-bottom: clamp(2.25rem, 5vw, 3.5rem); }
+
+.section__title { font-size: var(--step-h2); margin-block: 0.9rem 1.1rem; }
+
+.section__lede { font-size: var(--step-lede); color: var(--ash); max-width: 46ch; }
+
+.section__head-cta { margin-top: 1.5rem; }
+
+/* Uppercase label — the one recurring motif, always in the accent */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.eyebrow .sep { color: var(--line); }
+
+/* ---------- 4. Card ---------- */
+/* White on off-white; the border darkens to ink on hover — no shadow,
+   no colour change. */
+.card {
+  background: var(--bone);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+
+.card:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+/* ---------- 5. Chip ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--stone);
+}
+
+/* ---------- 6. Buttons ---------- */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-bd: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.4rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-bd);
+  border-radius: var(--radius);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease), color 0.15s var(--ease),
+              border-color 0.15s var(--ease);
+}
+
+.btn--accent { --btn-bg: var(--accent); --btn-fg: #fff; --btn-bd: var(--accent); }
+.btn--accent:hover { --btn-bg: var(--accent-deep); --btn-bd: var(--accent-deep); }
+
+.btn--ghost:hover { --btn-bg: var(--ink); --btn-fg: var(--paper); }
+
+.btn--lg { padding: 0.95rem 1.7rem; }
+
+/* ---------- 7. Header / navigation ---------- */
+/* A solid bar of brand blue, opened by the three-colour triad strip. */
+.site-head {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Scrolling deepens the bar to Codveda's #103eb2 — a flat colour change,
+   not a shadow. */
+.site-head.is-stuck { background: var(--accent-deep); }
+
+.site-head__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.25rem;
+}
+
+.site-head__progress {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--amber);
+  transition: width 0.1s linear;
+}
+
+/* Brand — in the blue bar, the official white wordmark, as published */
+.brand { display: inline-flex; align-items: center; gap: 0.6rem; }
+
+.brand__logo {
+  width: auto;
+  height: clamp(1.7rem, 4.5vw, 2rem);
+  transition: opacity 0.15s var(--ease);
+}
+.brand:hover .brand__logo { opacity: 0.85; }
+
+/* In the footer the ground is white, so the lockup is the official glyph
+   set beside the name in Poppins. Neither asset is altered. */
+.brand__mark { width: 1.75rem; height: 1.75rem; flex: none; }
+
+.brand__text { display: flex; flex-direction: column; line-height: 1.1; }
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.brand__sub {
+  font-family: var(--font-ui);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+/* Mobile: full-screen overlay menu */
+.nav {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding: 6rem var(--gutter) 3rem;
+  background: var(--accent);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s var(--ease), visibility 0.25s;
+}
+
+.site-head.nav-open .nav { opacity: 1; visibility: visible; }
+
+.nav__list { display: flex; flex-direction: column; }
+
+.nav__link {
+  display: block;
+  padding-block: 0.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5.5vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  transition: opacity 0.15s var(--ease);
+}
+
+.nav__link:hover { opacity: 0.75; }
+
+.nav__cta {
+  align-self: flex-start;
+  --btn-bg: #fff;
+  --btn-fg: var(--accent);
+  --btn-bd: #fff;
+}
+.nav__cta:hover { --btn-bg: var(--paper); --btn-bd: var(--paper); }
+
+.burger {
+  position: relative;
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius);
+  color: #fff;
+  cursor: pointer;
+}
+
+.burger__bar {
+  display: block;
+  width: 15px; height: 1.5px;
+  background: currentColor;
+  transition: transform 0.25s var(--ease);
+}
+.burger__bar:first-child { margin-bottom: 4px; }
+
+.burger__label {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.site-head.nav-open .burger__bar:first-child { transform: translateY(2.75px) rotate(45deg); }
+.site-head.nav-open .burger__bar:last-of-type { transform: translateY(-2.75px) rotate(-45deg); }
+
+/* Focus rings need to clear the blue ground */
+.site-head :focus-visible { outline-color: #fff; }
+
+/* ---------- 8. Hero ---------- */
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding-block: 8rem 4rem;
+}
+
+.hero__inner { width: 100%; align-items: end; }
+
+.hero__title {
+  font-size: var(--step-display);
+  font-weight: 600;
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  margin-block: 1.2rem 1.4rem;
+}
+
+.hero__line { display: block; overflow: hidden; }
+.hero__word { display: block; }
+
+.hero__kicker {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.hero__lede { font-size: var(--step-lede); color: var(--ash); max-width: 48ch; }
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 2rem; }
+
+.hero__card { padding: 1.5rem; border-top-width: 3px; border-top-color: var(--accent); }
+.hero__card:hover { transform: none; border-color: var(--line); border-top-color: var(--accent); }
+
+.hero__card-label {
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stone);
+  padding-bottom: 0.9rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Bullets redraw the logo's own marks: diamond, circle, square, diamond */
+.hero__card-list { display: grid; gap: 0.6rem; font-size: 0.95rem; color: var(--ink); }
+
+.hero__card-list li { display: flex; align-items: center; gap: 0.65rem; }
+
+.hero__card-list li::before {
+  content: "";
+  width: 9px; height: 9px;
+  flex: none;
+}
+.hero__card-list li:nth-child(1)::before { background: var(--blue);  transform: rotate(45deg); }
+.hero__card-list li:nth-child(2)::before { background: var(--amber); border-radius: 50%; }
+.hero__card-list li:nth-child(3)::before { background: var(--red);   border-radius: 1px; }
+.hero__card-list li:nth-child(4)::before { background: var(--accent-deep); transform: rotate(45deg); }
+
+.hero__card-foot {
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--stone);
+}
+
+/* ---------- 9. About — mission / vision ---------- */
+.section__grid { align-items: start; }
+
+.pillars { margin-block: clamp(2.5rem, 5vw, 3.5rem); }
+
+.pillar { padding: clamp(1.5rem, 3.5vw, 2.25rem); border-left-width: 3px; }
+.pillar:nth-child(1) { border-left-color: var(--blue); }
+.pillar:nth-child(2) { border-left-color: var(--amber); }
+
+.pillar__label {
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 1rem;
+}
+
+.pillar__text { color: var(--ash); font-size: 1rem; }
+
+/* ---------- 10. Stats ---------- */
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.4rem;
+  padding-top: 1.25rem;
+  border-top: 3px solid var(--line);
+}
+
+.stat:nth-child(1) { border-top-color: var(--blue); }
+.stat:nth-child(2) { border-top-color: var(--amber); }
+.stat:nth-child(3) { border-top-color: var(--red); }
+.stat:nth-child(4) { border-top-color: var(--accent-deep); }
+
+.stat__label {
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__value em { font-style: normal; color: var(--accent); }
+
+/* ---------- 11. Service cards ---------- */
+/* The section gets a flat tinted ground so the white cards read against it */
+#services { background: var(--band); }
+#services .card { border-color: #dbe4f5; }
+
+.cards > .card > article {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+/* Each card is capped by a 3px rule cycling diamond → circle → square,
+   and its chips take the matching flat tint. */
+.cards > .card { border-top-width: 3px; }
+
+.cards > .card:nth-child(3n+1) { border-top-color: var(--blue); }
+.cards > .card:nth-child(3n+2) { border-top-color: var(--amber); }
+.cards > .card:nth-child(3n+3) { border-top-color: var(--red); }
+
+.cards > .card:nth-child(3n+1) .chip { background: var(--tint-blue);  border-color: #d6e3fb; }
+.cards > .card:nth-child(3n+2) .chip { background: var(--tint-amber); border-color: #f6e4c2; }
+.cards > .card:nth-child(3n+3) .chip { background: var(--tint-red);   border-color: #f8d7d7; }
+
+.cards > .card .chip { color: var(--ash); }
+
+/* Hover darkens the three sides but leaves the coloured cap alone */
+.cards > .card:hover {
+  border-left-color: var(--ink);
+  border-right-color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.card__num {
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--stone);
+  margin-bottom: 2rem;
+}
+
+.card__title { font-size: var(--step-h3); margin-bottom: 0.75rem; }
+
+.card__text { color: var(--ash); font-size: 0.93rem; margin-bottom: 1.5rem; flex: 1; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+/* ---------- 12. Internship tracks ---------- */
+.track {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1.25rem;
+  padding-block: clamp(1.4rem, 3vw, 1.9rem);
+  border-top: 1px solid var(--line);
+}
+.track:first-child { border-top: 0; padding-top: 0; }
+
+.track__num {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--stone);
+  padding-top: 0.4rem;
+}
+
+/* A small coloured mark keeps the list from reading as plain rows */
+.track__num::before {
+  content: "";
+  width: 8px; height: 8px;
+  flex: none;
+}
+.track:nth-child(1) .track__num::before { background: var(--blue);        transform: rotate(45deg); }
+.track:nth-child(2) .track__num::before { background: var(--amber);       border-radius: 50%; }
+.track:nth-child(3) .track__num::before { background: var(--red);         border-radius: 1px; }
+.track:nth-child(4) .track__num::before { background: var(--accent-deep); transform: rotate(45deg); }
+
+.track__title { font-size: var(--step-h3); margin-bottom: 0.5rem; }
+.track__body p { color: var(--ash); font-size: 0.93rem; max-width: 54ch; }
+
+.track__meta { grid-column: 2; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+/* ---------- 13. Testimonials ---------- */
+.quotes > .quote { border-left-width: 3px; }
+.quotes > .quote:nth-child(1) { border-left-color: var(--blue); }
+.quotes > .quote:nth-child(2) { border-left-color: var(--amber); }
+.quotes > .quote:nth-child(3) { border-left-color: var(--red); }
+
+.quote figure {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  margin: 0;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+.quote blockquote { margin: 0; flex: 1; }
+.quote blockquote p { color: var(--ash); font-size: 0.93rem; }
+
+.quote figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.quote__name { font-weight: 600; font-size: 0.93rem; color: var(--ink); }
+
+.quote__role {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+/* ---------- 14. CTA — one flat block of brand blue ---------- */
+.cta { background: var(--accent); border-top: 0; }
+
+.cta .eyebrow { color: #fff; opacity: 0.75; }
+.cta .section__title { color: #fff; }
+
+.cta__text { font-size: var(--step-lede); color: rgba(255, 255, 255, 0.88); max-width: 46ch; }
+.cta__actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.5rem; }
+
+/* Buttons invert inside the blue block */
+.cta .btn--accent { --btn-bg: #fff; --btn-fg: var(--accent); --btn-bd: #fff; }
+.cta .btn--accent:hover { --btn-bg: var(--paper); --btn-bd: var(--paper); }
+
+.cta .btn--ghost { --btn-fg: #fff; --btn-bd: rgba(255, 255, 255, 0.55); }
+.cta .btn--ghost:hover { --btn-bg: #fff; --btn-fg: var(--accent); --btn-bd: #fff; }
+
+.cta :focus-visible { outline-color: #fff; }
+
+/* ---------- 15. Footer ---------- */
+.site-foot { background: var(--bone); }
+
+/* The logo's three colours, laid flat across the full width */
+.brand-bar { display: flex; height: 4px; }
+.brand-bar i:nth-child(1) { flex: 5; background: var(--blue); }
+.brand-bar i:nth-child(2) { flex: 2; background: var(--amber); }
+.brand-bar i:nth-child(3) { flex: 3; background: var(--red); }
+
+.site-foot__inner { padding-top: clamp(3rem, 6vw, 4.5rem); }
+
+.site-foot__top { padding-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+
+.site-foot .brand { margin-bottom: 1.2rem; }
+
+.foot-label {
+  font-family: var(--font-ui);
+  font-size: var(--step-ui);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 1.1rem;
+}
+
+.site-foot__desc { color: var(--ash); font-size: 0.92rem; max-width: 34ch; }
+
+.foot-list { display: grid; gap: 0.55rem; font-size: 0.92rem; color: var(--ash); }
+.foot-list a { transition: color 0.15s var(--ease); }
+.foot-list a:hover { color: var(--accent); }
+
+.socials { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.4rem; }
+
+.socials a {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--stone);
+  transition: color 0.15s var(--ease);
+}
+.socials a:hover { color: var(--ink); }
+
+/* Registrations strip */
+.creds {
+  padding-block: 1.6rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--stone);
+  word-break: break-word;
+}
+
+.creds span {
+  display: block;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+.site-foot__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--stone);
+}
+
+/* ============================================================
+   16. Responsive — tablet (≥ 700px)
+   ============================================================ */
+@media (min-width: 43.75em) {
+  .grid-12 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Two columns are too tight for a heading beside its body copy, and for
+     display type beside a card — these stay stacked until the real grid. */
+  .hero__inner,
+  .section__grid { grid-template-columns: 1fr; }
+
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .track { grid-template-columns: auto 1fr auto; gap: 1.5rem; }
+  .track__meta { grid-column: 3; justify-content: flex-end; padding-top: 0.35rem; }
+
+  .creds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .site-foot__bottom { flex-direction: row; justify-content: space-between; }
+}
+
+/* ============================================================
+   17. Responsive — desktop (≥ 1000px): the real 12-column grid
+   ============================================================ */
+@media (min-width: 62.5em) {
+  .grid-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+  .col-2 { grid-column: span 2; }
+  .col-3 { grid-column: span 3; }
+  .col-4 { grid-column: span 4; }
+  .col-5 { grid-column: span 5; }
+  .col-6 { grid-column: span 6; }
+  .col-7 { grid-column: span 7; }
+  .col-8 { grid-column: span 8; }
+
+  /* Nav returns to an inline bar */
+  .nav {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    background: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav__list { flex-direction: row; gap: 1.9rem; }
+
+  .nav__link {
+    padding-block: 0;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    border-bottom: 0;
+  }
+
+  .burger { display: none; }
+
+  .hero { padding-block: 10rem 5rem; }
+  .hero__inner { gap: 3rem var(--gap); }
+  .hero__card { margin-bottom: 0.5rem; }
+
+  .section__head { margin-bottom: 0; }
+  .section__head--sticky { position: sticky; top: 6.5rem; }
+
+  /* Sections that lead with a full-width heading keep the bottom margin */
+  #services .section__head,
+  #stories .section__head { margin-bottom: clamp(2.25rem, 5vw, 3.5rem); }
+
+  .pillars, .stats, .cards, .quotes { row-gap: var(--gap); }
+}
+
+/* ============================================================
+   18. Motion — one entrance, one reveal
+   ============================================================ */
+.hero__word { animation: rise 0.7s var(--ease) both; }
+.hero__line:nth-child(1) .hero__word { animation-delay: 0.05s; }
+.hero__line:nth-child(2) .hero__word { animation-delay: 0.13s; }
+.hero__line:nth-child(3) .hero__word { animation-delay: 0.21s; }
+
+.hero__kicker, .hero__lede, .hero__actions, .hero__card,
+.hero .eyebrow { animation: fade 0.6s var(--ease) 0.3s both; }
+
+@keyframes rise {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll-triggered reveals (class toggled by IntersectionObserver) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+[data-reveal].is-visible { opacity: 1; transform: none; }
+
+.cards [data-reveal].is-visible,
+.stats [data-reveal].is-visible,
+.quotes [data-reveal].is-visible,
+.pillars [data-reveal].is-visible,
+.tracks [data-reveal].is-visible { transition-delay: calc(var(--i, 0) * 60ms); }
+
+/* ============================================================
+   19. Reduced motion & print
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] { opacity: 1; transform: none; }
+}
+
+@media print {
+  .site-head { position: static; }
+  .card { break-inside: avoid; }
+}

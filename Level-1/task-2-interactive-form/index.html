@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create your account — Codveda Technologies</title>
+  <meta name="description" content="Create a Codveda Technologies account to apply for an internship. Interactive form with real-time JavaScript validation: name, email, phone number and password strength." />
+  <meta name="author" content="Tiomela Zangue Jorel" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" href="assets/favicon.png" sizes="192x192" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Poppins + Inter — the two typefaces codveda.com itself loads -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#form">Skip to the form</a>
+
+  <div class="split">
+    <!-- ══════════════════ LEFT — editorial panel ══════════════════ -->
+    <aside class="pane pane--brand">
+      <div class="brand-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="topbar">
+        <div class="topbar__inner">
+          <a class="brand" href="../index.html" aria-label="Codveda Technologies — back to index">
+            <img class="brand__logo" src="assets/codveda-logo.png" width="500" height="167"
+                 alt="Codveda Technologies" />
+          </a>
+          <p class="topbar__tag">Level 1 <span aria-hidden="true">/</span> Task 2</p>
+        </div>
+      </div>
+
+      <div class="pane__inner">
+        <div class="pane__body">
+          <p class="eyebrow">02 &mdash; Registration</p>
+          <h1 class="pane__title">
+            Two minutes<br />
+            <span class="outline">to get</span><br />
+            started.
+          </h1>
+          <p class="pane__lede">
+            Create your account to apply for an internship track — AI/ML, Data Science,
+            Web Development or Business Analytics. Every field is checked as you type.
+          </p>
+        </div>
+
+        <ol class="perks">
+          <li><span class="perks__num">01</span> 1-month remote tracks with mentor check-ins</li>
+          <li><span class="perks__num">02</span> Completion certificate on every programme</li>
+          <li><span class="perks__num">03</span> 1,800+ interns and 200+ stipend scholars so far</li>
+        </ol>
+      </div>
+    </aside>
+
+    <!-- ══════════════════ RIGHT — the form ══════════════════ -->
+    <main class="pane pane--form" id="form">
+      <div class="pane__inner">
+        <!-- Live region: announces the overall submit outcome -->
+        <p class="sr-only" role="status" aria-live="polite" id="formStatus"></p>
+
+        <header class="form-head">
+          <h2 class="form-head__title">Create your account</h2>
+          <p class="form-head__sub">
+            Already registered? <a href="#" class="link">Sign in instead</a>
+          </p>
+        </header>
+
+        <!-- novalidate: we own the validation UI, not the browser -->
+        <form class="form" id="signupForm" novalidate>
+          <!-- ── Full name ── -->
+          <div class="field" data-field>
+            <label class="field__label" for="name">
+              Full name <span class="field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="field__control">
+              <input
+                class="field__input"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Jorel Tiomela Zangue"
+                autocomplete="name"
+                required
+                aria-describedby="name-error"
+              />
+              <span class="field__icon" aria-hidden="true"></span>
+            </div>
+            <p class="field__error" id="name-error" role="alert"></p>
+          </div>
+
+          <!-- ── Email ── -->
+          <div class="field" data-field>
+            <label class="field__label" for="email">
+              Email address <span class="field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="field__control">
+              <input
+                class="field__input"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+                aria-describedby="email-error"
+              />
+              <span class="field__icon" aria-hidden="true"></span>
+            </div>
+            <p class="field__error" id="email-error" role="alert"></p>
+          </div>
+
+          <!-- ── Phone ── -->
+          <div class="field" data-field>
+            <label class="field__label" for="phone">
+              Phone number <span class="field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="field__control">
+              <input
+                class="field__input"
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+237 6 00 00 00 00"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+                aria-describedby="phone-hint phone-error"
+              />
+              <span class="field__icon" aria-hidden="true"></span>
+            </div>
+            <p class="field__hint" id="phone-hint">Digits only, 8–15 long. Country code optional.</p>
+            <p class="field__error" id="phone-error" role="alert"></p>
+          </div>
+
+          <!-- ── Password ── -->
+          <div class="field" data-field>
+            <label class="field__label" for="password">
+              Password <span class="field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="field__control">
+              <input
+                class="field__input field__input--pw"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="At least 8 characters"
+                autocomplete="new-password"
+                required
+                aria-describedby="pw-meter-label password-error"
+              />
+              <button class="field__toggle" type="button" data-toggle="password" aria-label="Show password" aria-pressed="false">
+                <span class="field__toggle-text">Show</span>
+              </button>
+            </div>
+
+            <!-- Strength meter -->
+            <div class="meter" id="pwMeter" hidden>
+              <div class="meter__bars" role="img" aria-hidden="true">
+                <i></i><i></i><i></i><i></i>
+              </div>
+              <p class="meter__label" id="pw-meter-label">Password strength: <span>—</span></p>
+            </div>
+
+            <!-- Requirement checklist -->
+            <ul class="rules" id="pwRules" hidden>
+              <li data-rule="len"><span class="rules__box" aria-hidden="true"></span>8 characters minimum</li>
+              <li data-rule="case"><span class="rules__box" aria-hidden="true"></span>Upper &amp; lowercase letter</li>
+              <li data-rule="num"><span class="rules__box" aria-hidden="true"></span>At least one number</li>
+              <li data-rule="sym"><span class="rules__box" aria-hidden="true"></span>At least one symbol</li>
+            </ul>
+
+            <p class="field__error" id="password-error" role="alert"></p>
+          </div>
+
+          <!-- ── Confirm password ── -->
+          <div class="field" data-field>
+            <label class="field__label" for="confirm">
+              Confirm password <span class="field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="field__control">
+              <input
+                class="field__input field__input--pw"
+                type="password"
+                id="confirm"
+                name="confirm"
+                placeholder="Type it once more"
+                autocomplete="new-password"
+                required
+                aria-describedby="confirm-error"
+              />
+              <button class="field__toggle" type="button" data-toggle="confirm" aria-label="Show password" aria-pressed="false">
+                <span class="field__toggle-text">Show</span>
+              </button>
+            </div>
+            <p class="field__error" id="confirm-error" role="alert"></p>
+          </div>
+
+          <!-- ── Terms ── -->
+          <div class="field field--check" data-field>
+            <label class="check">
+              <input class="check__input" type="checkbox" id="terms" name="terms" required aria-describedby="terms-error" />
+              <span class="check__box" aria-hidden="true"></span>
+              <span class="check__text">
+                I agree to the <a href="#" class="link">Terms of Service</a> and
+                <a href="#" class="link">Privacy Policy</a>.
+              </span>
+            </label>
+            <p class="field__error" id="terms-error" role="alert"></p>
+          </div>
+
+          <button class="submit" type="submit" id="submitBtn">
+            <span class="submit__text">Create account</span>
+            <span class="submit__spinner" aria-hidden="true"></span>
+          </button>
+
+          <p class="form-foot">
+            Student recreation · Level 1 · Task 2 — no data leaves your browser.
+          </p>
+        </form>
+
+        <!-- ══ Success state (swapped in on valid submit) ══ -->
+        <div class="success" id="success" hidden>
+          <div class="success__mark" aria-hidden="true">
+            <svg viewBox="0 0 52 52" width="44" height="44" focusable="false">
+              <circle class="success__circle" cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="2" />
+              <path class="success__check" d="M14 27 l8 8 l16 -18" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h2 class="success__title">You&rsquo;re in.</h2>
+          <p class="success__text">
+            Account created for <strong id="successEmail">—</strong>. A confirmation
+            email is on its way.
+          </p>
+          <dl class="success__recap" id="successRecap"></dl>
+          <button class="btn btn--ghost" type="button" id="resetBtn">Fill the form again</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/validation.js"></script>
+</body>
+</html>

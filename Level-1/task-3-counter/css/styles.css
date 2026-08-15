@@ -1,0 +1,348 @@
+/* ============================================================
+   Codveda Technologies — Counter
+   Level 1 · Task 3
+
+   Deliberately minimal: one large numeral, two controls, a floor
+   of zero. Light, flat colour only, same tokens as Tasks 1 & 2 so
+   the three projects read as one system.
+   ============================================================ */
+
+:root {
+  --paper:     #f9fbff;   /* Codveda light, exact — page ground */
+  --bone:      #ffffff;   /* controls, panels */
+
+  --ink:       #1b1f29;   /* Codveda dark, exact */
+  --ash:       #4b4f58;   /* Codveda body text, exact */
+  --stone:     #676d79;
+
+  --line:      #e0e3eb;   /* Codveda border, exact */
+
+  --accent:      #2563eb; /* Codveda primary, exact */
+  --accent-deep: #103eb2; /* Codveda, exact */
+  --signal:      #d92020; /* logo red, darkened for AA on white */
+
+  --blue:        #1a73e8; /* logo diamond */
+  --amber:       #ffa500; /* logo circle */
+  --red:         #ff3131; /* logo square */
+
+  /* Flat tints — fills only. #ffa500 and #ff3131 fail AA as text on
+     white, so coloured *text* is limited to #2563eb / #103eb2. */
+  --tint-blue:   #eef3fe;
+  --tint-amber:  #fff6e6;
+  --tint-red:    #ffefef;
+  --band:        #f2f6fd;
+
+  --font-display: "Poppins", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-body:    "Poppins", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-ui:      "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+
+  --radius: 4px;
+  --ease: cubic-bezier(0, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+body {
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ash);
+  font-family: var(--font-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; padding: 0; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: #fff; }
+
+
+/* The logo's three colours, laid flat across the full width */
+.brand-bar { display: flex; height: 4px; }
+.brand-bar i:nth-child(1) { flex: 5; background: var(--blue); }
+.brand-bar i:nth-child(2) { flex: 2; background: var(--amber); }
+.brand-bar i:nth-child(3) { flex: 3; background: var(--red); }
+
+/* ---------- Stage ---------- */
+.stage {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: calc(100svh - 3.9rem);
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* ---------- Top bar — a solid bar of brand blue ---------- */
+.topbar { background: var(--accent); color: #fff; }
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: 0.85rem clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* On blue, the official white wordmark is used exactly as published */
+.brand { display: inline-flex; align-items: center; }
+
+.brand__logo { width: auto; height: 1.7rem; transition: opacity 0.15s var(--ease); }
+.brand:hover .brand__logo { opacity: 0.85; }
+
+.topbar__tag {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+.topbar__tag span { color: rgba(255, 255, 255, 0.45); }
+
+.topbar :focus-visible { outline-color: #fff; }
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---------- Counter block ---------- */
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-block: 2.5rem;
+  text-align: center;
+}
+
+.display {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 24vw, 11rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.25s var(--ease);
+}
+
+.display__value { display: inline-block; }
+
+/* Direction-aware nudge on each change */
+.display.is-up   .display__value { animation: bump-up 0.28s var(--ease); }
+.display.is-down .display__value { animation: bump-down 0.28s var(--ease); }
+
+@keyframes bump-up {
+  0%   { transform: translateY(0.14em); opacity: 0.3; }
+  100% { transform: translateY(0);      opacity: 1; }
+}
+@keyframes bump-down {
+  0%   { transform: translateY(-0.14em); opacity: 0.3; }
+  100% { transform: translateY(0);       opacity: 1; }
+}
+
+/* At zero the numeral goes quiet — the state is visible, not just announced */
+.stage.is-zero .display { color: var(--stone); }
+
+.hint {
+  min-height: 1.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  color: var(--stone);
+  transition: color 0.2s var(--ease);
+}
+
+.hint.is-warning { color: var(--signal); }
+
+kbd {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bone);
+  font-family: inherit;
+  font-size: 0.9em;
+  color: var(--ash);
+}
+
+/* ---------- Controls ---------- */
+.controls { display: flex; gap: 0.7rem; }
+
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  width: clamp(5.5rem, 22vw, 7rem);
+  padding: 1.1rem 0.5rem 0.9rem;
+  background: var(--bone);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), background-color 0.15s var(--ease),
+              transform 0.15s var(--ease), opacity 0.15s var(--ease);
+}
+
+.ctrl__glyph { font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; line-height: 1; }
+
+.ctrl__label {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stone);
+  transition: color 0.15s var(--ease);
+}
+
+.ctrl:hover:not(:disabled) { border-color: var(--ink); transform: translateY(-2px); }
+.ctrl:active:not(:disabled) { transform: translateY(0); }
+
+.ctrl--plus { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ctrl--plus .ctrl__label { color: rgba(255, 255, 255, 0.75); }
+.ctrl--plus:hover:not(:disabled) { background: var(--accent-deep); border-color: var(--accent-deep); }
+
+/* The floor of zero, expressed in the UI rather than just enforced in JS */
+.ctrl:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.reset {
+  padding: 0.65rem 1.35rem;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ash);
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease), opacity 0.15s var(--ease);
+}
+
+.reset:hover:not(:disabled) { color: var(--signal); border-color: var(--signal); }
+.reset:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------- Step selector ---------- */
+/* A <legend> is not a normal flex item, so the fieldset stays a block
+   and the radios get their own flex row underneath. */
+.steps { border: 0; padding: 0; margin: 0; text-align: center; }
+
+.steps__legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.steps__options { display: flex; justify-content: center; gap: 0.35rem; }
+
+.steps__opt { position: relative; cursor: pointer; }
+
+.steps__opt input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.steps__opt span {
+  display: grid;
+  place-items: center;
+  min-width: 2.3rem;
+  padding: 0.32rem 0.6rem;
+  background: var(--bone);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--stone);
+  transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.steps__opt input:checked + span { border-color: var(--ink); color: var(--ink); }
+.steps__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Readout ---------- */
+.readout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: min(100%, 26rem);
+  margin-top: 0.5rem;
+}
+
+.readout > div {
+  background: var(--bone);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.5rem;
+}
+
+.readout > div:nth-child(1) { border-top-color: var(--blue); }
+.readout > div:nth-child(2) { border-top-color: var(--amber); }
+.readout > div:nth-child(3) { border-top-color: var(--red); }
+
+.readout dt {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.2rem;
+}
+
+.readout dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Footer ---------- */
+.stage__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  color: var(--stone);
+}
+
+@media (min-width: 40em) {
+  .stage__foot { flex-direction: row; justify-content: space-between; text-align: left; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

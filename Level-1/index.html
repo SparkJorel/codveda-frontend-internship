@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Level 1 — Codveda Front-End Internship</title>
+  <meta name="description" content="Level 1 deliverables for the Codveda Technologies front-end internship: responsive landing page, interactive form, and a vanilla-JS counter." />
+  <meta name="author" content="Tiomela Zangue Jorel" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" href="assets/favicon.png" sizes="192x192" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Poppins + Inter — the two typefaces codveda.com itself loads -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --paper: #f9fbff; --bone: #ffffff;
+      --ink: #1b1f29; --ash: #4b4f58; --stone: #676d79;
+      --line: #e0e3eb;
+      --accent: #2563eb; --accent-deep: #103eb2;
+      --blue: #1a73e8; --amber: #ffa500; --red: #ff3131;
+      --font-display: "Poppins", "Segoe UI", Helvetica, sans-serif;
+      --font-ui: "Inter", "Segoe UI", Helvetica, sans-serif;
+      --gap: clamp(1rem, 2vw, 1.5rem);
+      --ease: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+
+    /* Top bar — solid brand blue, opened by the three-colour triad strip.
+       On blue the official white wordmark is used exactly as published. */
+    .brand-bar { display: flex; height: 4px; }
+    .brand-bar i:nth-child(1) { flex: 5; background: var(--blue); }
+    .brand-bar i:nth-child(2) { flex: 2; background: var(--amber); }
+    .brand-bar i:nth-child(3) { flex: 3; background: var(--red); }
+
+    .topbar { background: var(--accent); color: #fff; }
+    .topbar__inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      max-width: 1280px; margin-inline: auto; padding: 0.9rem clamp(1rem, 4vw, 3rem);
+    }
+    .topbar__tag {
+      font-family: var(--font-ui); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+    }
+    .topbar :focus-visible { outline-color: #fff; }
+
+    .brand__logo { width: auto; height: 1.75rem; transition: opacity 0.15s var(--ease); }
+    .brand:hover .brand__logo { opacity: 0.85; }
+
+    body {
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      gap: clamp(2.5rem, 6vw, 3.5rem);
+      padding-bottom: clamp(2rem, 5vw, 3rem);
+      background: var(--paper);
+      color: var(--ash);
+      font-family: var(--font-display);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; padding: 0; }
+    img { display: block; max-width: 100%; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    .wrap { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3rem); }
+    body > header.wrap { margin-top: clamp(2.5rem, 7vw, 4.5rem); }
+
+    .brand { display: inline-flex; align-items: center; }
+
+    .eyebrow {
+      font-family: var(--font-ui); font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 5.5vw, 3.2rem);
+      font-weight: 600; line-height: 1.1; letter-spacing: -0.03em; color: var(--ink);
+      margin-block: 0.9rem 1.1rem;
+    }
+
+    .lede { color: var(--ash); max-width: 58ch; font-size: 1.02rem; }
+
+    .grid-12 { display: grid; gap: var(--gap); }
+
+    .card {
+      display: flex; flex-direction: column; gap: 0.65rem; height: 100%;
+      padding: 1.75rem;
+      background: var(--bone);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      transition: border-color 0.15s var(--ease), transform 0.15s var(--ease);
+    }
+    .card:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    /* Each card is capped by one of the logo's three colours */
+    .grid-12 > li:nth-child(1) .card { border-top: 3px solid var(--blue); }
+    .grid-12 > li:nth-child(2) .card { border-top: 3px solid var(--amber); }
+    .grid-12 > li:nth-child(3) .card { border-top: 3px solid var(--red); }
+
+    .card__num {
+      font-family: var(--font-ui); font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.16em; color: var(--stone); margin-bottom: 1.2rem;
+    }
+
+    .card__title { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+    .card__text { color: var(--ash); font-size: 0.91rem; flex: 1; }
+
+    .card__go {
+      display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.7rem;
+      font-family: var(--font-ui); font-size: 0.76rem; font-weight: 600; color: var(--accent);
+    }
+    .card__go span { transition: transform 0.2s var(--ease); }
+    .card:hover .card__go span { transform: translateX(3px); }
+
+    .chip {
+      align-self: flex-start; padding: 0.22rem 0.6rem;
+      background: var(--paper); border: 1px solid var(--line); border-radius: 100px;
+      font-family: var(--font-ui); font-size: 0.68rem; font-weight: 500; color: var(--stone);
+    }
+    .chip--sub { border-color: var(--accent); color: var(--accent); }
+
+    footer {
+      font-family: var(--font-ui); font-size: 0.7rem; color: var(--stone);
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between;
+      border-top: 1px solid var(--line); padding-top: 1.5rem;
+    }
+
+    @media (min-width: 43.75em) { .grid-12 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+    @media (min-width: 62.5em) {
+      .grid-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+      .col-4 { grid-column: span 4; }
+      .col-7 { grid-column: span 7; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="brand-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="https://www.codveda.com" target="_blank" rel="noopener noreferrer"
+         aria-label="Codveda Technologies">
+        <img class="brand__logo" src="assets/codveda-logo.png" width="500" height="167"
+             alt="Codveda Technologies" />
+      </a>
+      <p class="topbar__tag">Front-end internship</p>
+    </div>
+  </header>
+
+  <header class="wrap">
+    <p class="eyebrow">Level 01 &mdash; Basic</p>
+    <h1>Front-end internship deliverables</h1>
+    <p class="lede">
+      Three self-contained projects built on Codveda&rsquo;s own brand — the official
+      logo and glyph, the three logo colours as flat accents, and the Poppins/Inter
+      type stack the site itself loads. No build step, no dependencies: open any of
+      them in a browser.
+    </p>
+  </header>
+
+  <main class="wrap">
+    <ul class="grid-12">
+      <li class="col-4">
+        <a class="card" href="task-1-landing-page/index.html">
+          <p class="card__num">Task 01</p>
+          <span class="chip chip--sub">Submitted</span>
+          <h2 class="card__title">Responsive Landing Page</h2>
+          <p class="card__text">
+            Codveda&rsquo;s real services, internship tracks, impact figures and student
+            testimonials on a 12-column grid. Semantic HTML, Grid + Flexbox, mobile-first
+            media queries and smooth scrolling.
+          </p>
+          <p class="card__go">Open <span aria-hidden="true">&rarr;</span></p>
+        </a>
+      </li>
+
+      <li class="col-4">
+        <a class="card" href="task-2-interactive-form/index.html">
+          <p class="card__num">Task 02</p>
+          <span class="chip chip--sub">Submitted</span>
+          <h2 class="card__title">Interactive Form</h2>
+          <p class="card__text">
+            Account creation for an internship application. Real-time validation of name,
+            email, phone and password with a strength meter, focus/blur states and no
+            page reloads.
+          </p>
+          <p class="card__go">Open <span aria-hidden="true">&rarr;</span></p>
+        </a>
+      </li>
+
+      <li class="col-4">
+        <a class="card" href="task-3-counter/index.html">
+          <p class="card__num">Task 03</p>
+          <span class="chip">Bonus</span>
+          <h2 class="card__title">DOM Counter</h2>
+          <p class="card__text">
+            Increment, decrement and reset driven by a single state object, clamped so
+            the value never falls below zero.
+          </p>
+          <p class="card__go">Open <span aria-hidden="true">&rarr;</span></p>
+        </a>
+      </li>
+    </ul>
+  </main>
+
+  <footer class="wrap">
+    <p>Student recreation &middot; Codveda Technologies front-end internship</p>
+    <p>Tiomela Zangue Jorel</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Counter — Codveda Technologies</title>
+  <meta name="description" content="A minimal counter application built with vanilla JavaScript DOM manipulation: increment, decrement and reset, clamped at zero." />
+  <meta name="author" content="Tiomela Zangue Jorel" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" href="assets/favicon.png" sizes="192x192" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Poppins + Inter — the two typefaces codveda.com itself loads -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="brand-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="../index.html" aria-label="Codveda Technologies — back to index">
+        <img class="brand__logo" src="assets/codveda-logo.png" width="500" height="167"
+             alt="Codveda Technologies" />
+      </a>
+      <p class="topbar__tag">Level 1 <span aria-hidden="true">/</span> Task 3</p>
+    </div>
+  </header>
+
+  <div class="stage">
+
+    <main class="counter" id="main">
+      <p class="eyebrow">03 &mdash; DOM Manipulation</p>
+
+      <!-- The value itself. aria-live keeps screen readers in step. -->
+      <output class="display" id="display" for="incBtn decBtn resetBtn" aria-live="polite">
+        <span class="display__value" id="value">0</span>
+      </output>
+
+      <p class="hint" id="hint">Use the buttons, or the <kbd>↑</kbd> <kbd>↓</kbd> arrow keys.</p>
+
+      <div class="controls" role="group" aria-label="Counter controls">
+        <button class="ctrl ctrl--minus" type="button" id="decBtn" aria-label="Decrement" disabled>
+          <span class="ctrl__glyph" aria-hidden="true">–</span>
+          <span class="ctrl__label">Minus</span>
+        </button>
+
+        <button class="ctrl ctrl--plus" type="button" id="incBtn" aria-label="Increment">
+          <span class="ctrl__glyph" aria-hidden="true">+</span>
+          <span class="ctrl__label">Plus</span>
+        </button>
+      </div>
+
+      <button class="reset" type="button" id="resetBtn" disabled>Reset to zero</button>
+
+      <!-- Step selector — small extra, keeps the core interaction honest -->
+      <fieldset class="steps">
+        <legend class="steps__legend">Step</legend>
+        <div class="steps__options">
+          <label class="steps__opt">
+            <input type="radio" name="step" value="1" checked /><span>1</span>
+          </label>
+          <label class="steps__opt">
+            <input type="radio" name="step" value="5" /><span>5</span>
+          </label>
+          <label class="steps__opt">
+            <input type="radio" name="step" value="10" /><span>10</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <dl class="readout">
+        <div><dt>Clicks</dt><dd id="statClicks">0</dd></div>
+        <div><dt>Highest</dt><dd id="statPeak">0</dd></div>
+        <div><dt>Floor</dt><dd>0</dd></div>
+      </dl>
+    </main>
+
+    <footer class="stage__foot">
+      <p>Vanilla JavaScript · no frameworks · value never drops below zero</p>
+      <p>Student recreation · built by Tiomela Zangue Jorel</p>
+    </footer>
+  </div>
+
+  <script src="js/counter.js"></script>
+</body>
+</html>

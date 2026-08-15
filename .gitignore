@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------
+# Documents personnels et supports fournis — hors du dépôt public
+# (CV, lettre d'offre, énoncé des tâches)
+# ---------------------------------------------------------------
+*.pdf
+
+# Système
+Thumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Dépendances et build — utiles aux niveaux 2 et 3
+node_modules/
+dist/
+build/
+.cache/
+*.log
+
+# Variables d'environnement
+.env
+.env.*
+!.env.example
