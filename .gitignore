@@ -1,7 +1,4 @@
-# ---------------------------------------------------------------
-# Documents personnels et supports fournis — hors du dépôt public
-# (CV, lettre d'offre, énoncé des tâches)
-# ---------------------------------------------------------------
+
 *.pdf
 
 # Système
@@ -27,3 +24,6 @@ build/
 .env
 .env.*
 !.env.example
+
+# Build Vite (Niveau 2)
+Level-2/dist/

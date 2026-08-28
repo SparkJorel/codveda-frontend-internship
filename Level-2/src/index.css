@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Level 2 · Task 3 — CSS framework with a customised theme
+
+   Tailwind's default palette, type scale and radii are replaced
+   with Codveda's own design tokens, so utility classes such as
+   `bg-accent` or `text-ink` speak the brand's language rather
+   than Tailwind's generic one.
+
+   Every value is taken from Codveda's published assets: the site
+   palette on codveda.com (#2563eb, #103eb2, #1b1f29, #4b4f58,
+   #e0e3eb, #f9fbff) and the three logo shapes (#1a73e8 diamond,
+   #ffa500 circle, #ff3131 square).
+   ============================================================ */
+@theme {
+  /* Surfaces */
+  --color-paper: #f9fbff;
+  --color-bone: #ffffff;
+  --color-band: #f2f6fd;
+
+  /* Text */
+  --color-ink: #1b1f29;
+  --color-ash: #4b4f58;
+  --color-stone: #676d79;
+
+  /* Rules */
+  --color-line: #e0e3eb;
+
+  /* Brand */
+  --color-accent: #2563eb;
+  --color-accent-deep: #103eb2;
+  --color-brand-blue: #1a73e8;
+  --color-brand-amber: #ffa500;
+  --color-brand-red: #ff3131;
+  --color-signal: #d92020;
+
+  /* Flat tints — fills only, never text */
+  --color-tint-blue: #eef3fe;
+  --color-tint-amber: #fff6e6;
+  --color-tint-red: #ffefef;
+
+  /* Type — the two families codveda.com itself loads */
+  --font-display: "Poppins", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-ui: "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+
+  /* Shape — tight, in line with the Level 1 system */
+  --radius-brand: 4px;
+
+  --ease-brand: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ash);
+    font-family: var(--font-display);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    color: var(--color-ink);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+}
+
+/* ---------- Reusable brand components ---------- */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* White on off-white; the border darkens to ink on hover. Depth without
+     a single shadow — the same principle as Level 1. */
+  .card {
+    background: var(--color-bone);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-brand);
+    transition: border-color 0.15s var(--ease-brand), transform 0.15s var(--ease-brand);
+  }
+
+  .card:hover {
+    border-color: var(--color-ink);
+    transform: translateY(-2px);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: 100px;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--color-stone);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.35rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-brand);
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background-color 0.15s var(--ease-brand),
+                color 0.15s var(--ease-brand),
+                border-color 0.15s var(--ease-brand);
+  }
+
+  .btn-accent {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+  .btn-accent:hover {
+    background: var(--color-accent-deep);
+    border-color: var(--color-accent-deep);
+  }
+
+  .btn-ghost {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+/* ---------- Page transitions ---------- */
+/* Route changes fade the new view in rather than snapping to it. Kept to
+   a single short transform so navigation still feels instant. */
+@keyframes route-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.route-view {
+  animation: route-in 0.35s var(--ease-brand) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
