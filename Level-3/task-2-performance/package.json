@@ -1,0 +1,19 @@
+{
+  "name": "codveda-performance",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Level 3 Task 2 — performance optimisation of the Level 1 landing page, measured with Lighthouse.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve:before": "node serve.mjs before 5001",
+    "serve:after": "node serve.mjs after 5002",
+    "audit": "node audit.mjs",
+    "report": "node audit.mjs --report-only"
+  },
+  "devDependencies": {
+    "chrome-launcher": "^1.2.1",
+    "esbuild": "^0.28.2",
+    "lighthouse": "^13.4.1"
+  }
+}

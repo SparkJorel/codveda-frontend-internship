@@ -13,8 +13,10 @@ completed. Each level lives in its own folder.
 | Level | Status | Tasks completed |
 |---|---|---|
 | **Level 1 — Basic** | Complete | Responsive landing page · Interactive form · DOM counter *(bonus)* |
-| **Level 2 — Intermediate** | Not started | — |
-| **Level 3 — Advanced** | Not started | — |
+| **Level 2 — Intermediate** | Complete | React SPA · REST API integration · Customised Tailwind theme *(bonus)* |
+| **Level 3 — Advanced** | Complete | Performance optimisation · Advanced GSAP animations |
+
+All three levels exceed the two-tasks-per-level requirement.
 
 ---
 
@@ -62,6 +64,83 @@ A counter driven by a single state object. `render()` pushes state into the DOM 
 nothing ever reads the value back out of the markup, so the UI cannot drift out of
 sync. The zero floor is guarded twice — the decrement button is disabled and the
 state function refuses negative values — so keyboard shortcuts cannot bypass it.
+
+---
+
+## Level 2 — Intermediate
+
+[`Level-2/`](Level-2/) · [detailed notes](Level-2/README.md)
+
+A Vite + React 19 single-page application.
+
+```bash
+cd Level-2 && npm install && npm run dev
+```
+
+### Task 1 — Single Page Application
+
+Four client-side routes plus a 404, wired with React Router 7. Shared state lives in a
+React Context above the router, so a saved-repository shortlist survives navigation and,
+through `localStorage`, a page reload. Route changes reset scroll and move focus to
+`<main>` so the view change is announced to assistive technology.
+
+### Task 2 — REST API Integration
+
+Live search against the public GitHub search endpoint with native `fetch`. Queries are
+debounced by 400 ms because the unauthenticated endpoint allows only ten requests per
+minute, and each search aborts the previous one so a slow early response cannot overwrite
+a fast later one. Loading, empty and error states are handled separately, with rate
+limiting distinguished from other 403 responses.
+
+### Task 3 — CSS Framework *(bonus)*
+
+Tailwind CSS v4 with its palette, type stack and radii replaced by Codveda's tokens, so
+utilities read as `bg-accent` and `text-ink` rather than `bg-blue-600`.
+
+---
+
+## Level 3 — Advanced
+
+[`Level-3/`](Level-3/) · [detailed notes](Level-3/README.md)
+
+### Task 2 — Performance Optimisation
+
+The Level 1 landing page optimised and **measured**, not merely claimed. Lighthouse
+mobile preset, median of three runs, both builds served from the same local machine:
+
+| | Before | After |
+|---|---|---|
+| Performance | 75 | **99** |
+| First Contentful Paint | 3.9 s | **1.5 s** |
+| Largest Contentful Paint | 4.2 s | **1.8 s** |
+| Speed Index | 4.9 s | **1.5 s** |
+| Network requests | 11 | **9** |
+
+The largest win was self-hosting the fonts, which removes a serial chain of four
+round-trips across two third-party origins before any text can paint. Auditing also
+revealed the original page requested seven font weights but applied only five — and Inter
+costs 48 kB per weight.
+
+Two findings are documented as honestly as the wins: lossy WebP came out 84 % *larger*
+than the source PNGs, so the pipeline uses lossless and keeps the result only when it is
+genuinely smaller; and total bytes transferred still rise 19 %, a deliberate trade of
+payload for round-trips.
+
+### Task 3 — Advanced Animations
+
+GSAP 3 with ScrollTrigger: an entrance timeline, a staggered grid, a pinned section
+scrubbed by the scrollbar, tweened counters and magnetic buttons. Only `transform` and
+`opacity` are animated. Nothing is hidden by CSS, so a blocked script leaves a complete
+page rather than a blank one. Motion can be disabled both by `prefers-reduced-motion` and
+by a visible switch in the header.
+
+### Task 1 — not attempted, and why
+
+The brief's Level 3 Task 1 page is self-contradictory: the description asks for a Django
+web application with authentication, while the title and all four objectives describe a
+front-end component library documented with Storybook and published to NPM. The question
+has been raised with the Codveda team; the two unambiguous tasks were completed in the
+meantime.
 
 ---
 

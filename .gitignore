@@ -27,3 +27,6 @@ build/
 
 # Build Vite (Niveau 2)
 Level-2/dist/
+
+# Rapports Lighthouse volumineux
+Level-3/task-2-performance/reports/*.html

@@ -1,0 +1,37 @@
+{
+  "categories": {
+    "performance": 75,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "First Contentful Paint": {
+      "value": 3863.2398999999996,
+      "display": "3.9 s"
+    },
+    "Largest Contentful Paint": {
+      "value": 4163.2559,
+      "display": "4.2 s"
+    },
+    "Total Blocking Time": {
+      "value": 0,
+      "display": "0 ms"
+    },
+    "Cumulative Layout Shift": {
+      "value": 0,
+      "display": "0"
+    },
+    "Speed Index": {
+      "value": 4918.783056001983,
+      "display": "4.9 s"
+    }
+  },
+  "allRuns": [
+    65,
+    81,
+    75
+  ],
+  "requests": 11,
+  "totalBytes": 140833
+}

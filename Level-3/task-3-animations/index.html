@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Codveda Technologies — Motion</title>
+  <meta name="description" content="Scroll-driven and interactive animations built with GSAP for Codveda Technologies: timelines, pinned sections, tweened counters and pointer interaction." />
+  <meta name="author" content="Tiomela Zangue Jorel" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" href="assets/favicon.png" sizes="192x192" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="brand-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="../index.html" aria-label="Codveda Technologies — back to index">
+        <img class="brand__logo" src="assets/codveda-logo.png" width="500" height="167" alt="Codveda Technologies" />
+      </a>
+      <div class="topbar__side">
+        <p class="topbar__tag">Level 3 <span aria-hidden="true">/</span> Task 3</p>
+        <!-- A visitor-facing switch, not just a media query: anyone can stop
+             the motion, whatever their OS setting says. -->
+        <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="true">
+          <span class="motion-toggle__dot" aria-hidden="true"></span>
+          <span class="motion-toggle__label" id="motionLabel">Motion on</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <main id="main">
+    <!-- ══════════ 1. HERO — entrance timeline ══════════ -->
+    <section class="hero">
+      <div class="shell">
+        <p class="eyebrow" data-hero>Level 3 &mdash; Advanced animations</p>
+
+        <h1 class="hero__title">
+          <span class="line"><span class="word">Motion</span></span>
+          <span class="line"><span class="word">with a</span></span>
+          <span class="line"><span class="word">purpose.</span></span>
+        </h1>
+
+        <p class="hero__lede" data-hero>
+          Every animation here is a GSAP timeline tied to the scroll position.
+          Nothing moves without a reason, and everything stops the moment the
+          visitor asks it to.
+        </p>
+
+        <div class="hero__actions" data-hero>
+          <a class="btn btn--accent" href="#process">See the pinned timeline</a>
+          <a class="btn btn--ghost" href="#stats">Skip to the numbers</a>
+        </div>
+
+        <div class="marks" aria-hidden="true">
+          <span class="mark mark--diamond" data-float></span>
+          <span class="mark mark--circle" data-float></span>
+          <span class="mark mark--square" data-float></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ 2. STAGGERED REVEAL ══════════ -->
+    <section class="section" id="services">
+      <div class="shell">
+        <header class="section__head">
+          <p class="eyebrow" data-reveal>01 &mdash; Stagger on scroll</p>
+          <h2 class="section__title" data-reveal>Cards arrive in sequence.</h2>
+          <p class="section__lede" data-reveal>
+            One <code>ScrollTrigger</code> drives a single timeline that staggers all six
+            cards, instead of six separate observers. Fewer listeners, one source of truth.
+          </p>
+        </header>
+
+        <ul class="cards" id="cardGrid">
+          <li class="card"><p class="card__num">01</p><h3>Web Development</h3><p>Custom web applications, responsive design and e-commerce solutions.</p></li>
+          <li class="card"><p class="card__num">02</p><h3>AI / ML Solutions</h3><p>Artificial intelligence and machine learning applied to your business.</p></li>
+          <li class="card"><p class="card__num">03</p><h3>Mobile Apps</h3><p>Native and cross-platform applications with a considered experience.</p></li>
+          <li class="card"><p class="card__num">04</p><h3>UI / UX Design</h3><p>User-centred design that enhances usability, from research to system.</p></li>
+          <li class="card"><p class="card__num">05</p><h3>Digital Marketing</h3><p>Data-driven strategies that increase visibility and conversion.</p></li>
+          <li class="card"><p class="card__num">06</p><h3>IT Consulting</h3><p>Strategic technology guidance that maximises return on investment.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══════════ 3. PINNED, SCRUBBED TIMELINE ══════════ -->
+    <section class="pin" id="process">
+      <div class="pin__inner">
+        <div class="shell pin__grid">
+          <div class="pin__side">
+            <p class="eyebrow">02 &mdash; Pinned timeline</p>
+            <h2 class="section__title">Four stages,<br />one scrub.</h2>
+            <p class="section__lede">
+              The section pins and the scrollbar becomes the playhead. Scroll forward and
+              back &mdash; the timeline follows both ways, because it is scrubbed rather
+              than triggered once.
+            </p>
+            <p class="pin__counter"><span id="pinStep">01</span><em>&nbsp;/ 04</em></p>
+          </div>
+
+          <ol class="steps" id="steps">
+            <li class="step"><span class="step__num">01</span><div><h3>Discover</h3><p>Interviews, analytics archaeology and constraint mapping.</p></div></li>
+            <li class="step"><span class="step__num">02</span><div><h3>Architect</h3><p>Data model, service boundaries and a deployment story.</p></div></li>
+            <li class="step"><span class="step__num">03</span><div><h3>Build</h3><p>Two-week increments, demoed live behind feature flags.</p></div></li>
+            <li class="step"><span class="step__num">04</span><div><h3>Scale</h3><p>Observability, cost tuning and a readable hand-over.</p></div></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ 4. TWEENED COUNTERS ══════════ -->
+    <section class="section" id="stats">
+      <div class="shell">
+        <header class="section__head">
+          <p class="eyebrow" data-reveal>03 &mdash; Tweened numbers</p>
+          <h2 class="section__title" data-reveal>Counted, not faked.</h2>
+          <p class="section__lede" data-reveal>
+            GSAP tweens a plain object and the number is written on each frame, so the
+            easing is the same curve used everywhere else on the page.
+          </p>
+        </header>
+
+        <dl class="stats" id="stats-grid">
+          <div class="stat"><dd class="stat__value" data-count="1800">0</dd><dt>Happy interns</dt></div>
+          <div class="stat"><dd class="stat__value" data-count="200">0</dd><dt>Stipend scholars</dt></div>
+          <div class="stat"><dd class="stat__value" data-count="50">0</dd><dt>Expert mentors</dt></div>
+          <div class="stat"><dd class="stat__value" data-count="20">0</dd><dt>Clients</dt></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ══════════ 5. POINTER INTERACTION ══════════ -->
+    <section class="section section--band" id="hover">
+      <div class="shell">
+        <header class="section__head">
+          <p class="eyebrow" data-reveal>04 &mdash; Pointer interaction</p>
+          <h2 class="section__title" data-reveal>Buttons that lean in.</h2>
+          <p class="section__lede" data-reveal>
+            A magnetic hover, bound only where a fine pointer exists. Touch screens never
+            pay for a behaviour they cannot use.
+          </p>
+        </header>
+
+        <div class="magnets">
+          <button class="magnet" type="button" data-magnet>Start a project</button>
+          <button class="magnet magnet--ghost" type="button" data-magnet>Read the case study</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="shell site-foot__inner">
+      <p>Student recreation &middot; Level 3 &middot; Task 3 &mdash; built by Tiomela Zangue Jorel</p>
+      <p>GSAP 3 &middot; ScrollTrigger &middot; honours <code>prefers-reduced-motion</code></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="js/motion.js" defer></script>
+</body>
+</html>
